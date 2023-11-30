@@ -1,0 +1,51 @@
+
+
+// flex居中封装
+@mixin flex-center ($vertical: false){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @if $vertical {
+      flex-direction: column;
+  }
+}
+
+
+
+
+@keyframes fade-blur-in {
+  from {
+    filter: blur(calc(var(--blur) + 20px)) brightness(0.4);
+    transform: scale(1.5);
+  }
+  to {
+    filter: blur(var(--blur)) brightness(1);
+    transform: scale(1.2);
+  }
+}
+
+@keyframes twinkle {
+  0%{
+    opacity: 0.8;
+  }
+  70%{
+    opacity: 0.8;
+  }
+  100%{
+    opacity: 0.2;
+  }
+}
+
+@keyframes fade-up-in {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
