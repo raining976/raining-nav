@@ -1,6 +1,6 @@
 <template>
     <div class="cover">
-        <img ref="imgRef" v-show="!status.coverLoading" class="background" alt="background" :src="bgUrl" @load="imgLoadComplete"
+        <img ref="imgRef" v-show="!status.coverLoading" :class="['background',status.siteStatus == 'focus' ? 'focus' : null]" alt="background" :src="bgUrl" @load="imgLoadComplete"
             @animationend="imgAnimationEnd" :style="{ '--blur': settings.backgroundBlur + 'px' }" />
     </div>
 </template>
@@ -23,14 +23,10 @@ const imgLoadComplete = () => {
 }
 
 const setBgUrl = () => {
-    bgUrl.value = 'https://source.unsplash.com/random/2560x1440'
+    // bgUrl.value = 'https://source.unsplash.com/random/2560x1440'
+    bgUrl.value = 'https://tuapi.eees.cc/api.php?category=biying&type=302'
 }
 
-const setBgSize = () => {
-    imgRef.value.style.width = window.innerWidth +'px'
-    imgRef.value.style.height = window.innerHeight  +'px'
-
-}
 
 // 图片动画完成
 const imgAnimationEnd = () => {
@@ -52,6 +48,7 @@ onBeforeUnmount(() => {
 .cover {
     width: 100%;
     height: 100%;
+    overflow: hidden;
     position: relative;
     background-color: var(--body-background-color);
     .background {
@@ -66,6 +63,10 @@ onBeforeUnmount(() => {
         transform: scale(1.2);
         transition: filter 0.3s, transform 0.3s;
         animation: fade-blur-in 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        &.focus{
+            transform: scale(1.3);
+            filter: blur(8px);
+        }
     }
     &::after{
         content: '';
@@ -73,7 +74,7 @@ onBeforeUnmount(() => {
         left: 0;
         top: 0;
         width: 100%;
-        height: 100%;
+        height: 100vh;
         background-color: rgba(0, 0, 0, 0.3);
         z-index: 1;
     }
