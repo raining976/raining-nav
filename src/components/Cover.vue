@@ -51,6 +51,8 @@ onBeforeUnmount(() => {
     overflow: hidden;
     position: relative;
     background-color: var(--body-background-color);
+    // background-color: rgba(255, 255, 255, 0.5); /* 背景颜色，设置透明度 */
+
     .background {
         position: absolute;
         left: 0;

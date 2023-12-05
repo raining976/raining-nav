@@ -17,7 +17,7 @@ const props = defineProps({
 
 const keyboardEvents = (keyCode, event) => {
     if (keyCode == 13) {
-        toSearch
+        goSearch()
     }
 }
 

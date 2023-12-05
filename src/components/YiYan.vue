@@ -48,7 +48,10 @@ const getSentence = () => {
     bottom: 30px;
     transition: 0.3s;
     font-size: 1rem;
-
+    color: #fff;
+    width: 100%;
+    margin: 0 auto;
+    
     &.focus {
         bottom: 10px;
         font-size: 0.8rem;

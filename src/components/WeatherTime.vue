@@ -54,7 +54,7 @@ const getWeatherData = () => {
     getWeather().then(({ data }) => {
         const res = data.result
         weatherData.value = res.condition
-        console.log('weatherData', weatherData.value)
+        // console.log('weatherData', weatherData.value)
     })
 }
 
@@ -74,9 +74,11 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .weatherTimeContainer {
+    color: #fff;
+    margin-top: 150px;
     .time {
         @include flex-center(true);
-        transition: 0.3s;
+        transition: 0.4s;
 
         .clock {
             font-size: 4rem;
@@ -98,17 +100,17 @@ onBeforeUnmount(() => {
     &.focus {
         
         .time {
-            transform: translateY(-60px) scale(0.9);
+            transform: translateY(-30px) scale(0.9);
             opacity: 1;
         }
         .weather{
-            transform: translateY(-60px) scale(0.7);
+            transform: translateY(-30px) scale(0.7);
             opacity: 0
         }
     }
     .weather{
         @include flex-center();
-        transition: 0.3s;
+        transition: 0.5s;
         div{
             margin: 0 4px
         }

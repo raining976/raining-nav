@@ -14,5 +14,8 @@ export const useSettingsStore = defineStore({
         setCoverLoading(loading) {
             this.coverLoading = loading;
         },
+        setSearchEngine(searchEngine) {
+            this.searchEngine = searchEngine;
+        }
     },
 });

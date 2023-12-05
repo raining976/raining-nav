@@ -7,7 +7,7 @@
             <YiYan />
         </main>
         <div v-else id="loading">
-            <span class="tip">加载中...</span>
+            <Loading />
         </div>
     </Transition>
 </template>
@@ -75,12 +75,13 @@ const globalPressDown = (e) => {
     top: 0;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // flex-direction: column;
     z-index: 2; // 要大于1 不然会被背景的蒙版挡住
     outline: none;
+
 }
 
 #main {

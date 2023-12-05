@@ -33,7 +33,7 @@ const svgClass = computed(() => {
     height: 1em;
     min-width: 1em;
     position: relative;
-    fill: currentColor;
+    fill: #fff;
     vertical-align: -2px;
 }
 </style>
