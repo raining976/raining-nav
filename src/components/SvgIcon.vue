@@ -16,11 +16,16 @@ const props = defineProps({
     }
 })
 
-
+/**
+ * icon类名 通过icon名字计算得到
+ */
 const iconClassName = computed(() => {
     return `#${props.iconName}`;
 })
 
+/**
+ * svg的类名 
+ */
 const svgClass = computed(() => {
     return props.className ? `i-icon ${props.className}` : "i-icon";
 })

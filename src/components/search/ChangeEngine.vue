@@ -33,9 +33,7 @@ const selectCurEngine = (engine)=>{
 </script>
 
 <style lang="scss" scoped>
-$active-color: #ffffff80;
-$default-color: #ffffff45;
-$default-background-color: #ffffff35;
+
 $transition-duration: 300ms;
 .changeEngineContainer {
     $offsetX: 5px;
@@ -92,17 +90,5 @@ $transition-duration: 300ms;
     }
 }
 
-.fadeDown-enter-active,
-.fadeDown-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
 
-.fadeDown-enter-active {
-    transition-delay: 0.2s;
-}
-
-.fadeDown-enter-from,
-.fadeDown-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-}</style>
+</style>

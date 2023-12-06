@@ -54,10 +54,11 @@ input{
 
 
 .el-message {
-  --el-message-bg-color: #00000060 !important;
+  color: #efefef;
+  --el-message-bg-color: #ffffff30 !important;
   --el-message-text-color: #efefef !important;
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px) !important;
+  backdrop-filter: blur(10px) !important;
   border-radius: 25px !important;
   border-color: transparent !important;
 

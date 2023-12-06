@@ -13,30 +13,43 @@ import { useStatusStore } from '../store';
 const status = useStatusStore()
 const hitokoto = ref(null)
 const isShow = ref(false)
+
 onMounted(() => {
     getSentence()
 })
 
+/**
+ * 动画离开后回调
+ */
 const handleAfterLeave = () => {
     getSentence()
 }
 
+/**
+ * 刷新一言 这里执行隐藏 是因为隐藏动画执行完后自动执行获取新的
+ */
 const refreshSentence = () => {
     hiddenText()
 }
 
+/**
+ * 显示一言
+ */
 const showText = ()=>{
     isShow.value = true
 }
 
+/**
+ * 隐藏一言
+ */
 const hiddenText = ()=>{
     isShow.value = false
 }
-const getSentence = () => {
-    getOneSentence().then(({ data }) => {
+const getSentence = async () => {
+    await getOneSentence().then(({ data }) => {
         hitokoto.value = data.hitokoto
-        showText()
     })
+    showText()
 
 }
 </script>

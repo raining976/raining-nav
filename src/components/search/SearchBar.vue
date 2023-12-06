@@ -5,7 +5,7 @@
         }
             "></div>
         <div class="all">
-            <div class="engine iconBox" @click="changeEngine">
+            <div class="engine  iconBox" @click="changeEngine" :class="{focus:'focus' == status.getSiteStatus()}" >
                 <transition name="fade" mode="out-in">
                     <SvgIcon :iconName="`icon-${settings.searchEngine}`" :key="settings.searchEngine" />
                 </transition>
@@ -13,7 +13,7 @@
             <input type="text" id="main-input" class="searchInput" @focus="focusInput" v-model="status.searchInputValue"
                 @keydown.enter.prevent="handleEnter" @compositionstart="isComposing = true"
                 @compositionend="isComposing = false" @input="onInputting">
-            <div class="searchBtn iconBox" @click="goSearch(status.searchInputValue)">
+            <div class="searchBtn iconBox" :class="{focus:'focus' == status.getSiteStatus()}"  @click="goSearch(status.searchInputValue)">
                 <transition name="fade" mode="out-in">
                     <SvgIcon :iconName="`icon-search`" />
                 </transition>
@@ -28,8 +28,9 @@
 <script setup>
 import { useSettingsStore, useStatusStore } from '@/store'
 import defaultEngine from "@/assets/defaultEngine.json";
-import {debounce} from "@/utils/debounce.js"
+import { debounce } from "@/utils/debounce.js"
 import { ref } from 'vue';
+import { ElMessage } from 'element-plus';
 const settings = useSettingsStore()
 const status = useStatusStore()
 const isComposing = ref(true) // 是否正在输入拼音 如果正在上输入 此时回车不应该执行搜索
@@ -42,10 +43,17 @@ const changeEngine = () => {
     status.setSiteStatus('focus');
 }
 
+/**
+ * 聚焦input事件
+ */
 const focusInput = () => {
     status.setSiteStatus('focus');
+    status.setEngineChangeStatus(false)
 }
 
+/**
+ * 处理回车事件
+ */
 const handleEnter = () => {
     if (isComposing) {
         goSearch(status.searchInputValue)
@@ -68,6 +76,10 @@ const closeInput = () => {
  */
 const goSearch = (val, type = 1) => {
     const searchValue = val?.trim()
+    /**
+     * 根据跳转方式不同进行跳转
+     * @param {string} url 目标url
+     */
     const jumpLink = (url) => {
         if (settings.urlJumpType === "href") {
             window.location.href = url;
@@ -89,22 +101,36 @@ const goSearch = (val, type = 1) => {
             default:
                 break;
         }
+    } else {
+        openEmptyTip()
     }
 
 }
 
 /**
+ * 搜索内容为空的提示
+ */
+const openEmptyTip = () => {
+    ElMessage({
+        message: '搜索内容不能为空哦~',
+        type: 'none',
+        grouping: true
+    })
+}
+
+/**
  * 处理输入
  */
-const onInputting = debounce(()=>{
+const onInputting = debounce(() => {
     const keywords = status.getSearchInputValue()
-    console.log('keywords',keywords)
+    console.log('keywords', keywords)
 })
 
 </script>
 <style lang="scss" scoped>
 $height : 42px;
 
+$iconWidth: calc($height * 1.3) ;
 .searchBar {
     position: relative;
     width: 60%;
@@ -112,6 +138,7 @@ $height : 42px;
     min-width: 400px;
     margin: 0 auto;
     @include flex-center(true);
+
     .mask {
         position: fixed;
         left: 0;
@@ -119,7 +146,7 @@ $height : 42px;
         width: 100vw;
         height: 100vh;
         z-index: -1;
-        background-color: #00000070;
+        // background-color: #00000040;
     }
 
     .all {
@@ -131,13 +158,31 @@ $height : 42px;
 
     }
 
-    .engine {
+    .iconBox{
+        width: $iconWidth;
+        height: $height;
+        @include flex-center();
         position: absolute;
-        left: calc($height/3);
+        cursor: pointer;
         top: 50%;
         transform: translateY(-50%);
+        border-radius: calc($height / 2);
         z-index: 1;
-        cursor: pointer;
+        transition: 0.3s;
+        &:hover {
+            background-color: #00000060;
+        }
+        &.focus:hover{
+            background-color: #00000030;
+        }
+
+    }
+    .engine {
+        left: 0; 
+    }
+   
+    .searchBtn {
+        right: 0;
     }
 
     .searchInput {
@@ -148,7 +193,7 @@ $height : 42px;
         backdrop-filter: blur(10px);
         border-radius: calc($height);
         margin: 20px 0;
-        padding: 0 calc($height);
+        padding: 0 $iconWidth;
         color: #fff;
         font-size: 1rem;
         opacity: 1;
@@ -157,14 +202,7 @@ $height : 42px;
 
     }
 
-    .searchBtn {
-        cursor: pointer;
-        position: absolute;
-        right: calc($height/3);
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 1;
-    }
+   
 
     &.focus {
         .all {

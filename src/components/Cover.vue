@@ -16,28 +16,33 @@ const bgUrl = ref(null)
 const imgTimeout = ref(null)
 const imgRef = ref(null)
 
+/**
+ * 随机时间让图片加载完成
+ */
 const imgLoadComplete = () => {
     imgTimeout.value = setTimeout(() => {
         status.setCoverLoading(false)
     }, getRandomNumber(600, 300));
 }
 
+/**
+ * 设置图片url
+ */
 const setBgUrl = () => {
     // bgUrl.value = 'https://source.unsplash.com/random/2560x1440'
     bgUrl.value = 'https://tuapi.eees.cc/api.php?category=biying&type=302'
 }
 
 
-// 图片动画完成
+/**
+ * 图片动画加载完成的回调
+ */
 const imgAnimationEnd = () => {
-    console.log("壁纸加载且动画完成");
-    // 加载完成事件
     emit("loadComplete");
 };
 
 onMounted(() => {
     setBgUrl()
-    // setBgSize()
 })
 onBeforeUnmount(() => {
     clearTimeout(imgTimeout.value)

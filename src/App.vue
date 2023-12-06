@@ -14,17 +14,15 @@
 
 <script setup>
 import { getGreeting } from "@/utils/timeUtil.js"
-import { onMounted, ref, nextTick } from 'vue'
-import { useCounterStore, useStatusStore } from "@/store"
+import { nextTick } from 'vue'
+import { useStatusStore } from "@/store"
 
-const store = useCounterStore()
 const status = useStatusStore()
-const welcomeText = import.meta.env.VITE_WELCOME_TEXT || ''
+const welcomeText = import.meta.env.VITE_WELCOME_TEXT || '' // 欢迎语内容
 
-onMounted(() => {
-
-})
-
+/**
+ * 欢迎语
+ */
 const hello = () => {
     let helloText = getGreeting()
     ElMessage({
@@ -32,19 +30,23 @@ const hello = () => {
         message: `<strong>${helloText}</strong>,${welcomeText}`,
         center: true,
         duration: 3000,
-        icon: '',
-        type: 'info',
+        type: 'none',
         offset: 30
     })
 }
 
-// 加载完成事件
+/**
+ * 加载完成后执行
+ */
 const loadComplete = () => {
     nextTick().then(() => {
         hello()
     });
 };
 
+/**
+ * 全局键盘监听
+ */
 const globalPressDown = (e) => {
     const code = e.keyCode
     if (code == 13) {
@@ -53,13 +55,13 @@ const globalPressDown = (e) => {
         status.siteStatus = 'focus'
         mainInput?.focus()
     }
-    if( code == 27){
+    if (code == 27) {
         // 搜索框失焦
         let mainInput = document.getElementById('main-input')
         status.siteStatus = 'normal'
         mainInput?.blur()
         document.getElementById('main').focus()
-        
+
     }
 
 }
@@ -75,16 +77,12 @@ const globalPressDown = (e) => {
     top: 0;
     width: 100vw;
     height: 100vh;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // flex-direction: column;
     z-index: 2; // 要大于1 不然会被背景的蒙版挡住
     outline: none;
-
+    overflow: hidden
 }
 
-#main {
-    // transform: translateY(-100px);
+#loading {
+    @include flex-center();
 }
 </style>

@@ -2,8 +2,8 @@ import { solarToLunar } from "vue-solar-lunar";
 
 export const getCurTime = (hour12 = false) => {
     const date = new Date();
-    const formatTime = (value) => ( value < 10 ? "0" + value : value )
-    const format12Hour = (hour) =>(  hour % 12 == 0 ? 12 : hour % 12)
+    const formatTime = (value) => ( value < 10 ? "0" + value : value ) // 小于10加上0
+    const format12Hour = (hour) =>(  hour % 12 == 0 ? 12 : hour % 12) 
     const getAmPm = (value) => (value > 12 ? 'PM' : 'AM')
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
@@ -30,9 +30,6 @@ export const getCurTime = (hour12 = false) => {
 }
 
 
-
-
-
 /**
  * 获取当前时间问候语
  * @returns 
@@ -41,7 +38,8 @@ export const getGreeting = () => {
     const hour = new Date().getHours();
     let helloText = null
     if (hour < 6) helloText = '凌晨好'
-    else if (hour < 12) helloText = '早上好'
+    else if (hour < 8) helloText = '早上好'
+    else if(hour < 11) helloText = '上午好'
     else if (hour < 14) helloText = '中午好'
     else if (hour < 17) helloText = '下午好'
     else if (hour < 19) helloText = '傍晚好'

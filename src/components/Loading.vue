@@ -37,7 +37,6 @@
         <div class="dot"></div>
         <div class="dot"></div>
         <div class="tip">
-
             <div class="loadingDot">l</div>
             <div class="loadingDot">o</div>
             <div class="loadingDot">a</div>
