@@ -85,6 +85,7 @@ const associativeSearch = debounce(async (val) => {
 const keyboardEvents = (e) => {
     const keyCode = e.keyCode;
     const isCtrlPressed = e.ctrlKey
+    const isShiftPressed = e.shiftKey
     switch (keyCode) {
         case 27: // esc
             status.setSearchInputValue('')
@@ -92,9 +93,11 @@ const keyboardEvents = (e) => {
             document.getElementById("main").focus()
             break
         case 40: // 下键
+            focusDom()
+            break
         case 9: // tab键
             e.preventDefault()
-            focusDom()
+            focusDom(!isShiftPressed)
             break;
         case 13:// enter键
             const val = props.inputRef.value
