@@ -5,15 +5,15 @@
         }
             "></div>
         <div class="all">
-            <div class="engine  iconBox" @click="changeEngine" :class="{focus:'focus' == status.getSiteStatus()}" >
+            <div class="engine  iconBox" @click="changeEngine" :class="{ focus: 'focus' == status.getSiteStatus() }">
                 <transition name="fade" mode="out-in">
                     <SvgIcon :iconName="`icon-${settings.searchEngine}`" :key="settings.searchEngine" />
                 </transition>
             </div>
-            <input type="text" id="main-input" class="searchInput" @focus="focusInput" v-model="status.searchInputValue"
-                @keydown.enter.prevent="handleEnter" @compositionstart="isComposing = true"
-                @compositionend="isComposing = false" @input="onInputting">
-            <div class="searchBtn iconBox" :class="{focus:'focus' == status.getSiteStatus()}"  @click="goSearch(status.searchInputValue)">
+            <input type="text" id="main-input" class="searchInput" ref="inputRef" v-model="status.searchInputValue"
+                @focus="focusInput" @keydown.stop="pressedKeyboard">
+            <div class="searchBtn iconBox" :class="{ focus: 'focus' == status.getSiteStatus() }"
+                @click="goSearch(status.searchInputValue)">
                 <transition name="fade" mode="out-in">
                     <SvgIcon :iconName="`icon-search`" />
                 </transition>
@@ -22,18 +22,18 @@
         <!-- 搜索引擎切换版面 -->
         <ChangeEngine />
         <!-- 搜索建议版面 -->
-        <Suggestions ref="suggestionsRef" :keyWord="status.searchInputValue" @toSearch="goSearch" />
+        <Suggestions ref="suggestionsRef" :inputRef="inputRef" :keyword="status.searchInputValue" @goSearch="goSearch" />
     </div>
 </template>
 <script setup>
 import { useSettingsStore, useStatusStore } from '@/store'
 import defaultEngine from "@/assets/defaultEngine.json";
-import { debounce } from "@/utils/debounce.js"
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 const settings = useSettingsStore()
 const status = useStatusStore()
-const isComposing = ref(true) // 是否正在输入拼音 如果正在上输入 此时回车不应该执行搜索
+const suggestionsRef = ref(null)
+const inputRef = ref(null)
 
 /**
  * 修改搜索引擎
@@ -51,13 +51,13 @@ const focusInput = () => {
     status.setEngineChangeStatus(false)
 }
 
+
 /**
- * 处理回车事件
+ * 父组件处理键盘事件
+ * @param {event} e 键盘按键事件
  */
-const handleEnter = () => {
-    if (isComposing) {
-        goSearch(status.searchInputValue)
-    }
+const pressedKeyboard = (e) => {
+    suggestionsRef.value?.keyboardEvents(e)
 }
 
 /**
@@ -94,7 +94,6 @@ const goSearch = (val, type = 1) => {
             // 默认搜索
             case 1:
                 const engine = defaultEngine[settings.searchEngine];
-                // console.log('engine', engine.url)
                 jumpLink(engine?.url + searchFormat)
                 break;
 
@@ -113,24 +112,18 @@ const goSearch = (val, type = 1) => {
 const openEmptyTip = () => {
     ElMessage({
         message: '搜索内容不能为空哦~',
-        type: 'none',
         grouping: true
     })
 }
 
-/**
- * 处理输入
- */
-const onInputting = debounce(() => {
-    const keywords = status.getSearchInputValue()
-    console.log('keywords', keywords)
-})
+
 
 </script>
 <style lang="scss" scoped>
 $height : 42px;
 
-$iconWidth: calc($height * 1.3) ;
+$iconWidth: calc($height * 1.3);
+
 .searchBar {
     position: relative;
     width: 60%;
@@ -158,7 +151,7 @@ $iconWidth: calc($height * 1.3) ;
 
     }
 
-    .iconBox{
+    .iconBox {
         width: $iconWidth;
         height: $height;
         @include flex-center();
@@ -169,18 +162,21 @@ $iconWidth: calc($height * 1.3) ;
         border-radius: calc($height / 2);
         z-index: 1;
         transition: 0.3s;
+
         &:hover {
             background-color: #00000060;
         }
-        &.focus:hover{
+
+        &.focus:hover {
             background-color: #00000030;
         }
 
     }
+
     .engine {
-        left: 0; 
+        left: 0;
     }
-   
+
     .searchBtn {
         right: 0;
     }
@@ -202,7 +198,7 @@ $iconWidth: calc($height * 1.3) ;
 
     }
 
-   
+
 
     &.focus {
         .all {

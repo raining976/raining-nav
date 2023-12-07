@@ -28,6 +28,9 @@ export const useStatusStore = defineStore({
         getSearchInputValue() {
             return this.searchInputValue;
         },
+        setSearchInputValue(value) {
+            this.searchInputValue = value;
+        },
 
     },
 });

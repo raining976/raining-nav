@@ -26,15 +26,17 @@
         <div class="weather">
             <div class="cityName">{{ weatherData.cityName }}</div>
             <div class="condition">{{ weatherData.condition }}</div>
+            <div class="symbol" v-show="conditionSymbol!=null">{{ conditionSymbol }}</div>
             <div class="temp">{{ weatherData.temp }}℃</div>
             <div class="wind">{{ weatherData.windDir }}{{ weatherData.windLevel }}级</div>
+            
         </div>
     </div>
 </template>
 
 <script setup>
 import { getCurTime } from '@/utils/timeUtil';
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch,computed } from 'vue';
 import { useSettingsStore, useStatusStore } from '../store';
 import { getWeather } from '@/api';
 const settings = useSettingsStore();
@@ -44,6 +46,29 @@ const timeData = ref({}); // 时间数据
 const timeInterval = ref(null); // 时间定时器
 const lunarTime = ref({}); // 阴历数据
 const weatherData = ref({}); // 天气数据
+const conditionSymbols = ref({
+    "晴": '☀️',
+    "云": '☁',
+    "雨": '🌧',
+    "雪": '❄️',
+    "风": '🌬',
+    "雾": '🌫',
+}) // 天气图标的映射
+const conditionSymbol = ref(null) // 当前天气图标
+
+/**
+ * 根据传入的字符串获取当前天气图标
+ * @param {string} condition 当前天气描述
+ */
+const handlerCondition = (condition)=>{
+    const keys = Object.keys(conditionSymbols.value)
+    for(let key of keys){
+        if(condition.includes(key) || condition == key){
+            return conditionSymbols.value[key]
+        }
+    }
+    return null
+}
 
 /**
  * 更新时间
@@ -56,12 +81,16 @@ const updateTime = () => {
 /**
  * 获取天气信息
  */
-const getWeatherData = () => {
-    getWeather().then(({ data }) => {
+const getWeatherData = async () => {
+    await getWeather().then(({ data }) => {
         const res = data.result
         weatherData.value = res.condition
+        
     })
+    conditionSymbol.value = handlerCondition(weatherData.value.condition)
 }
+
+
 
 onMounted(() => {
     updateTime()

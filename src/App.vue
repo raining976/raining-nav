@@ -30,7 +30,6 @@ const hello = () => {
         message: `<strong>${helloText}</strong>,${welcomeText}`,
         center: true,
         duration: 3000,
-        type: 'none',
         offset: 30
     })
 }
@@ -40,6 +39,7 @@ const hello = () => {
  */
 const loadComplete = () => {
     nextTick().then(() => {
+        document.getElementById("main").focus()
         hello()
     });
 };

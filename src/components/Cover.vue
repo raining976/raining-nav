@@ -33,7 +33,6 @@ const setBgUrl = () => {
     bgUrl.value = 'https://tuapi.eees.cc/api.php?category=biying&type=302'
 }
 
-
 /**
  * 图片动画加载完成的回调
  */
