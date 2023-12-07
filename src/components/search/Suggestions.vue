@@ -86,7 +86,8 @@ const keyboardEvents = (e) => {
     const keyCode = e.keyCode;
     const isCtrlPressed = e.ctrlKey
     switch (keyCode) {
-        case 27:
+        case 27: // esc
+            status.setSearchInputValue('')
             status.setSiteStatus('normal')
             document.getElementById("main").focus()
             break
@@ -127,7 +128,7 @@ const goSearch = (val, type = 1) => {
  * @param {boolean} [isNext] 是否聚焦下一个 默认为true false为聚焦上一个
  */
 const focusDom = (isNext = true) => {
-    if (!suggestionsRef.value) return
+    if (!suggestionsRef.value || !suggestionsRef.value.children.length !=0) return
     const curIndex = curTabIndex.value
     const suggestions = suggestionsRef.value.children
     const len = suggestionList.value.length
@@ -199,7 +200,7 @@ defineExpose({ keyboardEvents });
     color: #fff;
     width: 100%;
     border-radius: 20px;
-    min-height: 40px;
+    min-height: 35px;
     background-color: $default-background-color;
     transform: translateY(-70px);
     overflow: hidden;
@@ -211,10 +212,10 @@ defineExpose({ keyboardEvents });
         left: 50%;
         transform: translateX(-50%);
         @include flex-center();
-        line-height: 40px;
+        line-height: 35px;
 
         .loadingBox {
-            height: 40px;
+            height: 35px;
             @include flex-center();
 
             .loading-spinner {
