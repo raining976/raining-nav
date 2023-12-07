@@ -1,5 +1,5 @@
 <template>
-    <Transition name="fadeDown" mode="out-in">
+    <Transition name="fadeUnfold" mode="out-in">
         <div class="changeEngineContainer" v-if="status.getEngineChangeStatus()">
             <el-row :gutter="10" justify="start">
                 <el-col :xl="6" :lg="6" :md="6" :sm="12" :xs="12" v-for="(engine, key) in engines" :key="key">

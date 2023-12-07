@@ -56,17 +56,3 @@ $default-background-color: #ffffff35;
 }
 
 
-.fadeDown-enter-active,
-.fadeDown-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.fadeDown-enter-active {
-    transition-delay: 0.2s;
-}
-
-.fadeDown-enter-from,
-.fadeDown-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
-}

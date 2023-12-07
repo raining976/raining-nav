@@ -1,25 +1,36 @@
 <template>
-    <Transition name="fadeDown" mode="out-in">
-        <div class="suggestionContainer" ref='suggestionsRef' @keydown="keyboardEvents"
-            v-if="status.getSearchInputValue() != '' && status.getSiteStatus() == 'focus' && !status.getEngineChangeStatus()">
-            <div class="listItem" v-for="(item, index) in suggestionList" :tabindex="1" :key="index">
-                <div>
-                    <SvgIcon :iconName="`icon-search`" />
+    <Transition name="unfold" mode="out-in">
+        <div class="suggestionsContainer" v-if="status.getSearchInputValue() != '' && status.getSiteStatus() == 'focus' && !status.getEngineChangeStatus()">
+            <div class="suggestionListBox" ref='suggestionsRef' :style="{ height: suggestionContainerHeight + 'px' }"
+                style="transition: height 0.3s ease;" @keydown="keyboardEvents"
+                >
+                <div class="listItem" v-for="(item, index) in suggestionList" :tabindex="1" :key="index">
+                    <div>
+                        <SvgIcon :iconName="`icon-search`" />
+                    </div>
+                    <div class="text"> {{ item }}</div>
                 </div>
-                <div class="text"> {{ item }}</div>
+            </div>
+            <div class="tipBox">
+                <div class="loadingBox" v-show="isLoading">
+                    <div class="loading-spinner"></div>
+                </div>
+                <div class="emptyTip" v-show="!isLoading && suggestionList.length == 0">空空如也~</div>
             </div>
         </div>
     </Transition>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { nextTick, ref, watch } from "vue";
 import { getSearchSuggestions } from "@/api";
 import { useStatusStore } from "@/store";
 import { debounce } from "@/utils/debounce.js";
 const status = useStatusStore()
 const emit = defineEmits(["goSearch", "focusInputDom"]);
 const suggestionList = ref([]); // 搜索建议列表
+const suggestionContainerHeight = ref(0); // 搜索建议容器高度
+const isLoading = ref(false);
 const props = defineProps({
     keyword: { // 搜索关键词
         type: String,
@@ -38,16 +49,31 @@ watch(
     () => props.keyword,
     (val) => {
         suggestionList.value = []
+        isLoading.value = true
         associativeSearch(val)
     }
 );
+
+watch(
+    () => suggestionList.value.length,
+    (newLen, oldLen) => {
+        if (newLen > 0) {
+            updateContainerHeight()
+        } else {
+            suggestionContainerHeight.value = 0
+        }
+    })
 
 /**
  * 搜索联想
  *  @param val 当前输入框中的值(用户输入的值)
  */
 const associativeSearch = debounce(async (val) => {
-    val != '' && (suggestionList.value = await getSearchSuggestions(val))
+    if (val != '') {
+
+        suggestionList.value = await getSearchSuggestions(val)
+        isLoading.value = false
+    }
 }, 500)
 
 
@@ -104,7 +130,7 @@ const focusDom = (isNext = true) => {
     if (!suggestionsRef.value) return
     const curIndex = curTabIndex.value
     const suggestions = suggestionsRef.value.children
-    const len = suggestions.length
+    const len = suggestionList.value.length
 
     if (isNext) {
         switch (curIndex) {
@@ -154,6 +180,13 @@ const updateInputValue = () => {
     }
 }
 
+const updateContainerHeight = () => {
+    nextTick(() => {
+        if (suggestionsRef.value)
+            suggestionContainerHeight.value = suggestionsRef.value.scrollHeight
+    })
+}
+
 // 将子组件的方法暴露出去
 defineExpose({ keyboardEvents });
 
@@ -161,14 +194,55 @@ defineExpose({ keyboardEvents });
 
 
 <style lang="scss" scoped>
-.suggestionContainer {
+.suggestionsContainer {
+    position: relative;
     color: #fff;
     width: 100%;
     border-radius: 20px;
-
+    min-height: 40px;
     background-color: $default-background-color;
     transform: translateY(-70px);
     overflow: hidden;
+    transition: height 0.3 ease !important;
+
+    .tipBox {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        @include flex-center();
+        line-height: 40px;
+
+        .loadingBox {
+            height: 40px;
+            @include flex-center();
+
+            .loading-spinner {
+                border: 3px solid rgba(0, 0, 0, 0.1);
+                border-radius: 50%;
+                border-top: 3px solid #ffffff50;
+                width: 12px;
+                height: 12px;
+                animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+
+        }
+
+        .emptyTip {
+            font-size: 14px;
+        }
+
+    }
 
     .listItem {
         display: flex;
@@ -197,5 +271,19 @@ defineExpose({ keyboardEvents });
             }
         }
     }
+}
+
+/* 使用 CSS 过渡属性实现平滑过渡效果 */
+.unfold-enter-active,
+.unfold-leave-active {
+    transition: height 0.5s;
+}
+
+/* 定义进入过渡的起始状态和结束状态 */
+.unfold-enter,
+.unfold-leave-to {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
 }
 </style>

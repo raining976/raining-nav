@@ -11,7 +11,7 @@
                 </transition>
             </div>
             <input type="text" id="main-input" class="searchInput" ref="inputRef" v-model="status.searchInputValue"
-                @focus="focusInput" @keydown.stop="pressedKeyboard">
+                @focus="focusInput" @keydown.stop="pressedKeyboard" placeholder="想要搜点什么">
             <div class="searchBtn iconBox" :class="{ focus: 'focus' == status.getSiteStatus() }"
                 @click="goSearch(status.searchInputValue)">
                 <transition name="fade" mode="out-in">
@@ -149,6 +149,7 @@ $iconWidth: calc($height * 1.3);
         margin: 0 auto;
         transition: transform 0.3s;
 
+
     }
 
     .iconBox {
@@ -196,6 +197,15 @@ $iconWidth: calc($height * 1.3);
         animation: fade-up-in 0.7s cubic-bezier(0.37, 0.99, 0.36, 1);
         transition: transform 0.3s, background-color 0.3s, opacity 0.5s;
 
+        &::-webkit-input-placeholder {
+            color: #fff;
+            font-family: Helvetica;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
     }
 
 
@@ -209,6 +219,10 @@ $iconWidth: calc($height * 1.3);
                 background-color: #f1eaea;
                 color: #333;
                 opacity: 1;
+                &::placeholder{
+                    color: transparent;
+
+                }
             }
 
             .iconBox :deep(svg) {
