@@ -13,6 +13,9 @@ export const useStatusStore = defineStore({
     actions: {
         setSiteStatus(status) {
             this.siteStatus = status;
+            if(status == 'normal'){
+                this.setEngineChangeStatus(false)
+            }
         },
         getSiteStatus() {
             return this.siteStatus;
