@@ -7,55 +7,62 @@
         </div>
         <Transition name="fadeDown" mode="out-in">
             <div class="listBox" v-show="status.isShowSettings">
-            <div class="list">
-                <div class="title">时间相关</div>
-                <div class="item">
-                    <div class="text">12小时制</div>
-                    <div class="handler"><el-switch v-model="settings.is12Time" /></div>
-                </div>
-                <div class="item">
-                    <div class="text">是否显示秒</div>
-                    <div class="handler"><el-switch v-model="settings.isShowSeconds" /></div>
-                </div>
-                <div class="item">
-                    <div class="text">是否显示农历</div>
-                    <div class="handler"><el-switch v-model="settings.isShowLunar" /></div>
-                </div>
-            </div>
-            <div class="list">
-                <div class="title">背景相关</div>
-                <div class="item">
-                    <div class="text">模糊度</div>
-                    <div class="handler sliderContainer"><el-slider v-model="settings.backgroundBlur" size="small" :max="20"/></div>
-                </div>
-            </div>
-            <div class="list">
-                <div class="title">搜索相关</div>
-                <div class="item">
-                    <div class="text">默认搜索引擎</div>
-                    <div class="handler"><span class="changeEngine" @click="changeEngine">前往修改</span></div>
-                </div>
-                <div class="item">
-                    <div class="text">链接打开方式</div>
-                    <div class="handler">
-                        <el-select v-model="settings.urlJumpType" size="small">
-                            <el-option label="当前页面打开" value="href" />
-                            <el-option label="在新页面打开" value="open" />
-                        </el-select>
+                <div class="list">
+                    <div class="title">时间相关</div>
+                    <div class="item">
+                        <div class="text">12小时制</div>
+                        <div class="handler"><el-switch v-model="settings.is12Time" /></div>
+                    </div>
+                    <div class="item">
+                        <div class="text">是否显示秒</div>
+                        <div class="handler"><el-switch v-model="settings.isShowSeconds" /></div>
+                    </div>
+                    <div class="item">
+                        <div class="text">是否显示农历</div>
+                        <div class="handler"><el-switch v-model="settings.isShowLunar" /></div>
                     </div>
                 </div>
-            </div>
-            <div class="list">
-                <div class="title">其他</div>
-                <div class="item inputTagItem">
-                    <div class="text">自定义一言</div>
-                    <div class="handler ">
-                        <InputTag/>
+                <div class="list">
+                    <div class="title">背景相关</div>
+                    <div class="item">
+                        <div class="text">模糊度</div>
+                        <div class="handler sliderContainer"><el-slider v-model="settings.backgroundBlur" size="small"
+                                :max="20" /></div>
                     </div>
                 </div>
-              
+                <div class="list">
+                    <div class="title">搜索相关</div>
+                    <div class="item">
+                        <div class="text">默认搜索引擎</div>
+                        <div class="handler"><span class="changeEngine" @click="changeEngine">前往修改</span></div>
+                    </div>
+                    <div class="item">
+                        <div class="text">链接打开方式</div>
+                        <div class="handler">
+                            <el-select v-model="settings.urlJumpType" size="small">
+                                <el-option label="当前页面打开" value="href" />
+                                <el-option label="在新页面打开" value="open" />
+                            </el-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="list">
+                    <div class="title">一言</div>
+                    <div class="item">
+                        <div class="text">一言刷新间隔(秒,0为不刷新)</div>
+                        <div class="handler"><el-input-number class="yiYanTimeInput" size="small" controls-position="right"
+                                v-model="settings.refreshYiYanTime" :min="0"
+                                @change="settings.setRefreshYiYanTime(value)" /></div>
+                    </div>
+                    <div class="item inputTagItem">
+                        <div class="text">自定义一言</div>
+                        <div class="handler ">
+                            <InputTag />
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
         </Transition>
     </div>
 </template>
@@ -70,7 +77,7 @@ const status = useStatusStore()
  */
 const openSettings = () => {
     status.isShowSettings = !status.isShowSettings
-    if(status.isShowSettings){
+    if (status.isShowSettings) {
         status.setSiteStatus('normal')
     }
 }
@@ -91,6 +98,7 @@ const changeEngine = () => {
     top: 20px;
     right: 30px;
     z-index: 1;
+
     .btnBox {
         width: 100%;
         display: flex;
@@ -155,13 +163,39 @@ const changeEngine = () => {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                .sliderContainer{
+
+                .sliderContainer {
                     display: flex;
                     align-items: center;
                     width: 50%;
                 }
-                &.inputTagItem{
-                     align-items: start;
+
+                &.inputTagItem {
+                    align-items: start;
+                }
+
+                .yiYanTimeInput {
+                    width: 90px;
+                    :deep(.el-input-number__decrease),
+                    :deep(.el-input-number__increase) {
+                        &:hover~.el-input .el-input__wrapper{
+                            box-shadow: 0 0 0 1px #ffffff inset;
+                        }
+                        
+                    }
+                    :deep(.el-input__wrapper){
+                        padding-right: 30px;
+                    }
+                    :deep(.el-input-number__decrease),
+                    :deep(.el-input-number__increase),
+                    :deep(.el-input__wrapper) {
+                        background-color: #ffffff40;
+
+                        .el-icon {
+                            color: #ffffff;
+                        }
+
+                    }
                 }
             }
         }
@@ -196,9 +230,10 @@ const changeEngine = () => {
 }
 
 /* 选择器 */
-.el-select .el-input .el-input__wrapper{
+.el-select .el-input .el-input__wrapper {
     width: 100px;
 }
+
 .el-select .el-input .el-input__wrapper,
 .el-select .el-input.is-focus .el-input__wrapper.is-focus,
 .el-input__wrapper.is-focus {
@@ -236,16 +271,19 @@ const changeEngine = () => {
     color: #efefef !important;
 }
 
-.el-slider__bar{
+.el-slider__bar {
     background-color: #00000040;
 }
-.el-scrollbar{
+
+.el-scrollbar {
     width: 110px;
 }
-.el-select-dropdown__item{
-    padding:0 5px !important;
+
+.el-select-dropdown__item {
+    padding: 0 5px !important;
     font-size: 12px;
 }
+
 .el-popper__arrow::before,
 .el-select__popper,
 .el-select-dropdown,
@@ -266,7 +304,7 @@ const changeEngine = () => {
     border-color: #00000090;
     transform: scale(0.7);
 }
-.el-slider__button.hover{
+
+.el-slider__button.hover {
     transform: scale(0.9) !important;
-}
-</style>
+}</style>

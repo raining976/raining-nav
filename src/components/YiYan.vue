@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import {  onMounted, ref } from 'vue';
+import {  onBeforeUnmount, onMounted, ref } from 'vue';
 import { getOneSentence } from '@/api/index.js';
 import { useStatusStore, useSettingsStore } from '../store';
 const status = useStatusStore()
@@ -15,15 +15,34 @@ const settings = useSettingsStore()
 const hitokoto = ref(null)
 const isShow = ref(false)
 const curIndex = ref(0) // 用户自定义语句当前索引
-
+const timer = ref(null)
 onMounted(() => {
     getSentence()
+    startTimer()
 })
+onBeforeUnmount(()=>{
+    destroyTimer()
+})
+const startTimer = ()=>{
+    timer.value = setInterval(() => {
+        refreshSentence()
+    }, settings.refreshYiYanTime * 1000)
+}
+
+const destroyTimer = ()=>{
+    clearInterval(timer.value)
+}
+
+const refreshTimer = ()=>{
+    destroyTimer()
+    startTimer()
+}
 
 /**
  * 动画离开后回调
  */
 const handleAfterLeave = () => {
+  
     getSentence()
 }
 
@@ -31,6 +50,7 @@ const handleAfterLeave = () => {
  * 刷新一言 这里执行隐藏 是因为隐藏动画执行完后自动执行获取新的
  */
 const refreshSentence = () => {
+    refreshTimer()
     hiddenText()
 }
 

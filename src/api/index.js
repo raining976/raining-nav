@@ -48,7 +48,7 @@ function jsonp(url, params = {}) {
  */
 export const getSearchSuggestions = async (keyword) => {
     //组装查询地址
-    let url = `http://suggestion.baidu.com/su`
+    let url = `https://suggestion.baidu.com/su`
     let result = await jsonp(url,{
         wd:keyword
     }).then(res => res.s)

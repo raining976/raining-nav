@@ -11,6 +11,7 @@ export const useSettingsStore = defineStore({
         searchEngine: 'bing', // 搜索引擎
         urlJumpType: "href", // 跳转方式 href 业内跳转 open 打开新页面
         customYiYan:[], // 自定义 一言
+        refreshYiYanTime: 30, // 刷新一言时间 0 为不刷新
     }),
     actions: {
         setCoverLoading(loading) {
@@ -33,6 +34,10 @@ export const useSettingsStore = defineStore({
         },
         customYiYanEdit(index,item){
             this.customYiYan[index] = item
+        },
+        setRefreshYiYanTime(time){
+            if(time >= 0)
+                this.refreshYiYanTime = time
         }
     },
     // 数据持久化
