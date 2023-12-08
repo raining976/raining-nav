@@ -10,6 +10,7 @@ export const useSettingsStore = defineStore({
         is12Time: true, // 是否是12小时制
         searchEngine: 'bing', // 搜索引擎
         urlJumpType: "href", // 跳转方式 href 业内跳转 open 打开新页面
+        customYiYan:[], // 自定义 一言
     }),
     actions: {
         setCoverLoading(loading) {
@@ -23,6 +24,15 @@ export const useSettingsStore = defineStore({
         },
         getIs12Time() {
             return this.is12Time;
+        },
+        customYiYanPush(item){
+            this.customYiYan.push(item)
+        },
+        customYiYanDel(index){
+            this.customYiYan.splice(index,1)
+        },
+        customYiYanEdit(index,item){
+            this.customYiYan[index] = item
         }
     },
     // 数据持久化

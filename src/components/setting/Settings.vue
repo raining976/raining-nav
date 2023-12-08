@@ -23,11 +23,17 @@
                 </div>
             </div>
             <div class="list">
+                <div class="title">背景相关</div>
+                <div class="item">
+                    <div class="text">模糊度</div>
+                    <div class="handler sliderContainer"><el-slider v-model="settings.backgroundBlur" size="small" :max="20"/></div>
+                </div>
+            </div>
+            <div class="list">
                 <div class="title">搜索相关</div>
                 <div class="item">
                     <div class="text">默认搜索引擎</div>
-                    <div class="handler"><span class="changeEngine" @click="changeEngine">前往修改</span>
-                    </div>
+                    <div class="handler"><span class="changeEngine" @click="changeEngine">前往修改</span></div>
                 </div>
                 <div class="item">
                     <div class="text">链接打开方式</div>
@@ -38,6 +44,16 @@
                         </el-select>
                     </div>
                 </div>
+            </div>
+            <div class="list">
+                <div class="title">其他</div>
+                <div class="item inputTagItem">
+                    <div class="text">自定义一言</div>
+                    <div class="handler ">
+                        <InputTag/>
+                    </div>
+                </div>
+              
             </div>
         </div>
         </Transition>
@@ -70,11 +86,11 @@ const changeEngine = () => {
 
 <style lang="scss" scoped>
 .settingsContainer {
-    $width: 300px;
+    $width: 350px;
     position: fixed;
     top: 20px;
     right: 30px;
-
+    z-index: 1;
     .btnBox {
         width: 100%;
         display: flex;
@@ -134,11 +150,19 @@ const changeEngine = () => {
 
             .item {
                 width: 100%;
-                height: 30px;
+                min-height: 30px;
                 line-height: 30px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
+                .sliderContainer{
+                    display: flex;
+                    align-items: center;
+                    width: 50%;
+                }
+                &.inputTagItem{
+                     align-items: start;
+                }
             }
         }
 
@@ -172,12 +196,14 @@ const changeEngine = () => {
 }
 
 /* 选择器 */
-
+.el-select .el-input .el-input__wrapper{
+    width: 100px;
+}
 .el-select .el-input .el-input__wrapper,
 .el-select .el-input.is-focus .el-input__wrapper.is-focus,
 .el-input__wrapper.is-focus {
     transition: all 0.3s !important;
-    background-color: #ffffff90 !important;
+    background-color: #ffffff40 !important;
     border-color: #00000090 !important;
     box-shadow: none !important;
 }
@@ -210,6 +236,16 @@ const changeEngine = () => {
     color: #efefef !important;
 }
 
+.el-slider__bar{
+    background-color: #00000040;
+}
+.el-scrollbar{
+    width: 110px;
+}
+.el-select-dropdown__item{
+    padding:0 5px !important;
+    font-size: 12px;
+}
 .el-popper__arrow::before,
 .el-select__popper,
 .el-select-dropdown,
@@ -222,5 +258,15 @@ const changeEngine = () => {
 
 .el-select-dropdown__list {
     background-color: #00000040 !important;
+}
+
+
+/* 滑块 */
+.el-slider__button {
+    border-color: #00000090;
+    transform: scale(0.7);
+}
+.el-slider__button.hover{
+    transform: scale(0.9) !important;
 }
 </style>

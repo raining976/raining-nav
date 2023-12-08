@@ -7,12 +7,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import {  onMounted, ref } from 'vue';
 import { getOneSentence } from '@/api/index.js';
-import { useStatusStore } from '../store';
+import { useStatusStore, useSettingsStore } from '../store';
 const status = useStatusStore()
+const settings = useSettingsStore()
 const hitokoto = ref(null)
 const isShow = ref(false)
+const curIndex = ref(0) // 用户自定义语句当前索引
 
 onMounted(() => {
     getSentence()
@@ -35,21 +37,33 @@ const refreshSentence = () => {
 /**
  * 显示一言
  */
-const showText = ()=>{
+const showText = () => {
     isShow.value = true
 }
 
 /**
  * 隐藏一言
  */
-const hiddenText = ()=>{
+const hiddenText = () => {
     isShow.value = false
 }
+
 const getSentence = async () => {
-    await getOneSentence().then(({ data }) => {
-        hitokoto.value = data.hitokoto
-    })
-    showText()
+    const len = settings.customYiYan.length
+    if (len != 0) {
+        hitokoto.value =  settings.customYiYan[curIndex.value]
+        curIndex.value++
+        if (curIndex.value >= len) {
+            curIndex.value = 0
+        }
+        setTimeout(() => {
+            showText()
+        }, 300);
+    } else {
+        hitokoto.value = await getOneSentence()
+        showText()
+    }
+  
 
 }
 </script>
@@ -64,13 +78,14 @@ const getSentence = async () => {
     color: #fff;
     width: 100%;
     margin: 0 auto;
-    
+
     &.focus {
         bottom: 10px;
         font-size: 0.8rem;
         opacity: 0;
     }
-    .text{
+
+    .text {
         cursor: pointer;
     }
 }
@@ -82,10 +97,11 @@ const getSentence = async () => {
 
 
 
-.slide-fade-enter-from{
+.slide-fade-enter-from {
     transform: translateX(-20px);
     opacity: 0;
 }
+
 .slide-fade-leave-to {
     transform: translateX(20px);
     opacity: 0;

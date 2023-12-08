@@ -2,7 +2,7 @@ import axios from "axios";
 
 // 获取一言的请求
 export const getOneSentence = async () => {
-    return axios.get('https://v1.hitokoto.cn')
+    return await axios.get('https://v1.hitokoto.cn').then(({data})=>data.hitokoto)
         .catch(console.error)
 };
 
