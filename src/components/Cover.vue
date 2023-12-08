@@ -30,7 +30,8 @@ const imgLoadComplete = () => {
  */
 const setBgUrl = () => {
     // bgUrl.value = 'https://source.unsplash.com/random/2560x1440'
-    bgUrl.value = 'https://tuapi.eees.cc/api.php?category=biying&type=302'
+    // bgUrl.value = 'https://tuapi.eees.cc/api.php?category=biying&type=302'
+    bgUrl.value = 'https://api.aixiaowai.cn/gqapi/gqapi.php'
 }
 
 /**
