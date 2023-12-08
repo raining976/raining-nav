@@ -1,5 +1,5 @@
 <template>
-    <Transition name="unfold" mode="out-in">
+    <Transition name="fadeDown" mode="out-in">
         <div class="suggestionsContainer" v-if="status.getSearchInputValue() != '' && status.getSiteStatus() == 'focus' && !status.getEngineChangeStatus()">
             <div class="suggestionListBox" ref='suggestionsRef' :style="{ height: suggestionContainerHeight + 'px' }"
                 style="transition: height 0.3s ease;" @keydown="keyboardEvents"
