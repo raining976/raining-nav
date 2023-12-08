@@ -4,7 +4,7 @@
             <div class="suggestionListBox" ref='suggestionsRef' :style="{ height: suggestionContainerHeight + 'px' }"
                 style="transition: height 0.3s ease;" @keydown="keyboardEvents"
                 >
-                <div class="listItem" v-for="(item, index) in suggestionList" :tabindex="1" :key="index">
+                <div class="listItem" v-for="(item, index) in suggestionList" :tabindex="1" :key="index" @click="goSearch(item),console.log(item)">
                     <div>
                         <SvgIcon :iconName="`icon-search`" />
                     </div>
