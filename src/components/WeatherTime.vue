@@ -1,42 +1,44 @@
 <template>
-    <div :class="['weatherTimeContainer', status.siteStatus == 'focus' ? 'focus' : null]">
+    <div @click="closeInput" :class="['weatherTimeContainer', status.siteStatus == 'focus' ? 'focus' : null]">
         <div class="time">
             <div class="clock">
                 <span class="hour">{{ timeData.hour ?? "00" }}</span>
                 <span class="separator">:</span>
                 <span>{{ timeData.minute ?? "00" }}</span>
-                <div class="secondBox" v-show="settings.isShowSeconds">
+                <span class="secondBox" v-show="settings.isShowSeconds">
                     <span class="separator">:</span>
                     <span>{{ timeData.second ?? "00" }}</span>
+                </span>
+                <span class="amPm" v-show="settings.getIs12Time()">{{ timeData.amPm }}</span>
+            </div>
+            <div class="dateBox">
+                <div class="solarTime date">
+                    <span>{{ timeData.month }}</span>
+                    <span>月</span>
+                    <span>{{ timeData.day }}</span>
+                    <span>日</span>
                 </div>
-                <span class="amPm" v-if="settings.getIs12Time()">{{ timeData.amPm }}</span>
-            </div>
-            <div class="solarTime date">
-                <span>{{ timeData.month }}</span>
-                <span>月</span>
-                <span>{{ timeData.day }}</span>
-                <span>日</span>
-            </div>
-            <div class="lunarTime date" v-show="settings.isShowLunar">
-                <span>{{ lunarTime.monthStr }}</span>
-                <span>{{ lunarTime.dayStr }}&nbsp;</span>
-                <span>{{ lunarTime.ncWeek }}</span>
+                <div class="lunarTime date" v-show="settings.isShowLunar">
+                    <span>{{ lunarTime.monthStr }}</span>
+                    <span>{{ lunarTime.dayStr }}&nbsp;</span>
+                    <span>{{ lunarTime.ncWeek }}</span>
+                </div>
             </div>
         </div>
         <div class="weather">
             <div class="cityName">{{ weatherData.cityName }}</div>
             <div class="condition">{{ weatherData.condition }}</div>
-            <div class="symbol" v-show="conditionSymbol!=null">{{ conditionSymbol }}</div>
+            <div class="symbol" v-show="conditionSymbol != null">{{ conditionSymbol }}</div>
             <div class="temp">{{ weatherData.temp }}℃</div>
             <div class="wind">{{ weatherData.windDir }}{{ weatherData.windLevel }}级</div>
-            
+
         </div>
     </div>
 </template>
 
 <script setup>
 import { getCurTime } from '@/utils/timeUtil';
-import { onBeforeUnmount, onMounted, ref, watch,computed } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch, computed } from 'vue';
 import { useSettingsStore, useStatusStore } from '../store';
 import { getWeather } from '@/api';
 const settings = useSettingsStore();
@@ -60,10 +62,10 @@ const conditionSymbol = ref(null) // 当前天气图标
  * 根据传入的字符串获取当前天气图标
  * @param {string} condition 当前天气描述
  */
-const handlerCondition = (condition)=>{
+const handlerCondition = (condition) => {
     const keys = Object.keys(conditionSymbols.value)
-    for(let key of keys){
-        if(condition.includes(key) || condition == key){
+    for (let key of keys) {
+        if (condition.includes(key) || condition == key) {
             return conditionSymbols.value[key]
         }
     }
@@ -85,7 +87,7 @@ const getWeatherData = async () => {
     await getWeather().then(({ data }) => {
         const res = data.result
         weatherData.value = res.condition
-        
+
     })
     conditionSymbol.value = handlerCondition(weatherData.value.condition)
 }
@@ -119,6 +121,15 @@ onBeforeUnmount(() => {
     endTimer()
 })
 
+/**
+ * 关闭输入框调用 单纯的脱焦并不能完全覆盖所有情况
+ */
+ const closeInput = () => {
+    status.setSiteStatus('normal');
+    status.setEngineChangeStatus(false);
+    status.setIsShowSettings(false)
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -131,19 +142,29 @@ onBeforeUnmount(() => {
         transition: 0.4s;
 
         .clock {
+            // width: 100%;
             font-size: 4rem;
-            .amPm{
+
+            .secondBox {
+                font-size: 4rem;
+            }
+
+            .amPm {
                 font-size: 1.4rem;
                 opacity: 0.8;
                 margin-left: 10px;
             }
+
             .separator {
                 animation: twinkle 1s linear infinite;
             }
         }
-
+        .dateBox{
+            @include flex-center();
+        }
         .date {
             opacity: 0.8;
+            margin: 0 5px;
 
         }
 

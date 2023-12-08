@@ -47,6 +47,7 @@ $transition-duration: 300ms;
     padding: 10px;
     background-color: $default-background-color;
     border-radius: 10px;
+    overflow: auto;
 
     .engineItem {
         position: relative;

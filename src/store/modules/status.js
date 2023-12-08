@@ -8,6 +8,7 @@ export const useStatusStore = defineStore({
         siteStatus:'normal', // 站点状态 normal focus set
         searchInputValue:"", // 搜索文本框的内容
         engineChangeStatus:false, // 是否正在切换引擎   ,
+        isShowSettings:false, // 是否打开设置
     }),
     actions: {
         setSiteStatus(status) {
@@ -21,6 +22,7 @@ export const useStatusStore = defineStore({
         },
         setEngineChangeStatus(status) {
             this.engineChangeStatus = status;
+            if(status) this.setSiteStatus('focus')
         },
         getEngineChangeStatus() {
             return this.engineChangeStatus;
@@ -31,6 +33,9 @@ export const useStatusStore = defineStore({
         setSearchInputValue(value) {
             this.searchInputValue = value;
         },
+        setIsShowSettings(isShow){
+            this.isShowSettings = isShow;
+        }
 
     },
 });

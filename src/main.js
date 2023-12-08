@@ -7,11 +7,6 @@ import App from './App.vue'
 import store from './store'
 // import custom components
 import SvgIcon from "@/components/SvgIcon.vue";
-// pinia
-import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-const pinia = createPinia()
-pinia.use(piniaPluginPersistedstate)
 
 const app = createApp(App)
 

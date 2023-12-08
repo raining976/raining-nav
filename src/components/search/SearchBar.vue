@@ -11,7 +11,7 @@
                 </transition>
             </div>
             <input type="text" id="main-input" class="searchInput" ref="inputRef" v-model="status.searchInputValue"
-                @focus="focusInput" @keydown.stop="pressedKeyboard" placeholder="想要搜点什么">
+                @focus="focusInput" @keydown.stop="pressedKeyboard" :placeholder="searchTip">
             <div class="searchBtn iconBox" :class="{ focus: 'focus' == status.getSiteStatus() }"
                 @click="goSearch(status.searchInputValue)">
                 <transition name="fade" mode="out-in">
@@ -34,6 +34,8 @@ const settings = useSettingsStore()
 const status = useStatusStore()
 const suggestionsRef = ref(null)
 const inputRef = ref(null)
+
+const searchTip = import.meta.env.VITE_INPUT_TIP || "" // 搜索提示词
 
 /**
  * 修改搜索引擎
@@ -66,6 +68,7 @@ const pressedKeyboard = (e) => {
 const closeInput = () => {
     status.setSiteStatus('normal');
     status.setEngineChangeStatus(false);
+    status.setIsShowSettings(false)
 }
 
 

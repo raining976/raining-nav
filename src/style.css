@@ -29,6 +29,7 @@ html,
 body {
   width: 100vw;
   height: 100vh;
+  font-family: "HarmonyOS_Regular", sans-serif;
 }
 
 input {
@@ -63,11 +64,12 @@ input {
   backdrop-filter: blur(10px) !important;
   border-radius: 25px !important;
   border-color: transparent !important;
-  --shadow-color:#222;
+  --shadow-color: #222;
   -moz-box-shadow: 0px 2px 15px var(--shadow-color);
   -webkit-box-shadow: 0px 2px 15px var(--shadow-color);
   box-shadow: 0px 2px 15px var(--shadow-color);
   font-weight: 500;
+
   .el-message__badge {
     display: none;
   }
@@ -82,19 +84,26 @@ input {
   }
 }
 
+.el-popper__arrow::before,
+.el-popper {
+  border: none !important;
+  background-color: #192c4a !important;
+}
+
+
+
+
 .fadeDown-enter-active,
 .fadeDown-leave-active {
-    transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .fadeDown-enter-active {
-    transition-delay: 0.2s;
+  transition-delay: 0.2s;
 }
 
 .fadeDown-enter-from,
 .fadeDown-leave-to {
-    opacity: 0;
-    transform: translateY(-10px);
+  opacity: 0;
+  transform: translateY(-10px);
 }
-
-

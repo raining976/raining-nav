@@ -5,6 +5,9 @@
             <WeatherTime />
             <SearchBar />
             <YiYan />
+
+
+            <Settings />
         </main>
         <div v-else id="loading">
             <Loading />
@@ -85,4 +88,6 @@ const globalPressDown = (e) => {
 #loading {
     @include flex-center();
 }
+
+
 </style>

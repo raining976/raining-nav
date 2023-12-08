@@ -8,7 +8,7 @@ export const useSettingsStore = defineStore({
         isShowSeconds: false, // 是否显示秒
         isShowLunar: false, // 是否显示农历
         is12Time: true, // 是否是12小时制
-        searchEngine: 'google', // 搜索引擎
+        searchEngine: 'bing', // 搜索引擎
         urlJumpType: "href", // 跳转方式 href 业内跳转 open 打开新页面
     }),
     actions: {
@@ -26,7 +26,8 @@ export const useSettingsStore = defineStore({
         }
     },
     // 数据持久化
-    // persist: {
-    //     key: 'settings',
-    // },
+    persist: {
+        key: "settings",
+        storage: localStorage,
+    },
 });
