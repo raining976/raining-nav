@@ -25,12 +25,12 @@
                 </div>
             </div>
         </div>
-        <div class="weather">
-            <div class="cityName">{{ weatherData.cityName }}</div>
-            <div class="condition">{{ weatherData.condition }}</div>
+        <div class="weather" v-if="weatherData">
+            <div class="cityName">{{ weatherData.city }}</div>
+            <div class="condition">{{ weatherData.weather }}</div>
             <div class="symbol" v-show="conditionSymbol != null">{{ conditionSymbol }}</div>
-            <div class="temp">{{ weatherData.temp }}℃</div>
-            <div class="wind">{{ weatherData.windDir }}{{ weatherData.windLevel }}级</div>
+            <div class="temp">{{ weatherData.temperature }}℃</div>
+            <div class="wind">{{ weatherData.winddirection }}风{{ weatherData.windpower }}级</div>
 
         </div>
     </div>
@@ -84,12 +84,8 @@ const updateTime = () => {
  * 获取天气信息
  */
 const getWeatherData = async () => {
-    await getWeather().then(({ data }) => {
-        const res = data.result
-        weatherData.value = res.condition
-
-    })
-    conditionSymbol.value = handlerCondition(weatherData.value.condition)
+    weatherData.value = await getWeather()
+    conditionSymbol.value = handlerCondition(weatherData.value.weather)
 }
 
 
@@ -124,7 +120,7 @@ onBeforeUnmount(() => {
 /**
  * 关闭输入框调用 单纯的脱焦并不能完全覆盖所有情况
  */
- const closeInput = () => {
+const closeInput = () => {
     status.setSiteStatus('normal');
     status.setEngineChangeStatus(false);
     status.setIsShowSettings(false)
@@ -159,9 +155,11 @@ onBeforeUnmount(() => {
                 animation: twinkle 1s linear infinite;
             }
         }
-        .dateBox{
+
+        .dateBox {
             @include flex-center();
         }
+
         .date {
             opacity: 0.8;
             margin: 0 5px;

@@ -2,17 +2,23 @@ import axios from "axios";
 
 // 获取一言的请求
 export const getOneSentence = async () => {
-    return await axios.get('https://v1.hitokoto.cn').then(({data})=>data.hitokoto)
+    return await axios.get('/getYiyan').then(({data})=>data.hitokoto)
         .catch(console.error)
 };
 
 /**
- * 获取天气
- * https://api.oioweb.cn/doc/weather/GetWeather
+ * 获取天气信息
+ * @author raining976
+ * 高德 free good
+ * https://lbs.amap.com/api/webservice/guide/api/weatherinfo
  */
-export const getWeather = () => {
-    return axios.get('https://api.oioweb.cn/api/weather/GetWeather').catch(console.error);
-};
+export const getWeather = async () => {
+    var regionData =  await axios.get('/getIp').then(res=> res.data )   
+    const cityCode = regionData.reginCode || regionData.cityCode
+    const gaodeKey = '5af2bbd8702291fc7df7015d94e8c19e' // 高德地图的web服务api
+    const weatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${gaodeKey}&city=${cityCode}` 
+    return await axios.get(weatherUrl).then(res=>res=res.data.lives[0]).catch(error => console.error(error))
+  }
 
 
 

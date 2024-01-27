@@ -1,5 +1,7 @@
 # 一个简约又好用的导航页
 
+![](https://gitee.com/yogurt-alpaca/markdown-imgs/raw/master/img/202312121121822.png)
+
 ### 一些说明
 - 原作者在这里: [仓库地址](https://github.com/imsyy/Snavigation)   
 - 主要是为了学习和熟悉技术才做的,基本都是**仿照原作者的思路和样式做的**,在此鸣谢
@@ -24,7 +26,7 @@
     npm run dev
     # 打包构建
     npm run build
-    ``` 
+    ```
 
 
 ### 技术栈以及组件
@@ -37,5 +39,4 @@
 
 ### api
 - [hitokoto一言](https://hitokoto.cn/)
-
 
