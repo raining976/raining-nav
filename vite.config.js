@@ -7,17 +7,6 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "./",
-  build: {
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        //生产环境时移除console
-        drop_console: true,
-        drop_debugger: true,
-      }
-    }
-  },
   plugins: [
     vue(),
     // ele-plus 自动按需导入
