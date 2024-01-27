@@ -17,8 +17,21 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  server:{
-    port:3000
+  server: {
+    port: 3000,
+    proxy: {
+      // 跨域配置
+      '/getIp': {
+        target: "https://whois.pconline.com.cn/ipJson.jsp?json=true", //跨域地址
+        changeOrigin: true, //支持跨域
+        rewrite: (path) => path.replace(/^\/getIp/, "")//重写路径,替换 /getIp
+      },
+      '/getYiyan': {
+        target: "https://v1.hitokoto.cn",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/getYiyan/, "")
+      }
+    }
   },
   resolve: {
     alias: {
