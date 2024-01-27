@@ -1,13 +1,13 @@
 <template>
     <div class="YiYanContainer" :class="['YiYanContainer', status.siteStatus]">
         <transition name="slide-fade" @after-leave="handleAfterLeave">
-            <div class="text" v-show="isShow" @click="refreshSentence">{{ hitokoto }}</div>
+            <div class="text" id="hitokoto" v-show="isShow" @click="refreshSentence">{{ hitokoto }}</div>
         </transition>
     </div>
 </template>
 
 <script setup>
-import {  onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { getOneSentence } from '@/api/index.js';
 import { useStatusStore, useSettingsStore } from '../store';
 const status = useStatusStore()
@@ -16,24 +16,25 @@ const hitokoto = ref(null)
 const isShow = ref(false)
 const curIndex = ref(0) // 用户自定义语句当前索引
 const timer = ref(null)
+const hitokotoScript = ref(null)
 onMounted(() => {
     getSentence()
     startTimer()
 })
-onBeforeUnmount(()=>{
+onBeforeUnmount(() => {
     destroyTimer()
 })
-const startTimer = ()=>{
+const startTimer = () => {
     timer.value = setInterval(() => {
         refreshSentence()
     }, settings.refreshYiYanTime * 1000)
 }
 
-const destroyTimer = ()=>{
+const destroyTimer = () => {
     clearInterval(timer.value)
 }
 
-const refreshTimer = ()=>{
+const refreshTimer = () => {
     destroyTimer()
     startTimer()
 }
@@ -42,7 +43,6 @@ const refreshTimer = ()=>{
  * 动画离开后回调
  */
 const handleAfterLeave = () => {
-  
     getSentence()
 }
 
@@ -50,6 +50,10 @@ const handleAfterLeave = () => {
  * 刷新一言 这里执行隐藏 是因为隐藏动画执行完后自动执行获取新的
  */
 const refreshSentence = () => {
+    if(hitokotoScript.value){
+        document.body.removeChild(hitokotoScript.value)
+        hitokotoScript.value = null
+    }
     refreshTimer()
     hiddenText()
 }
@@ -57,8 +61,10 @@ const refreshSentence = () => {
 /**
  * 显示一言
  */
-const showText = () => {
-    isShow.value = true
+const showText = (timeout = 300) => {
+    setTimeout(() => {
+        isShow.value = true
+    }, timeout);
 }
 
 /**
@@ -71,19 +77,19 @@ const hiddenText = () => {
 const getSentence = async () => {
     const len = settings.customYiYan.length
     if (len != 0) {
-        hitokoto.value =  settings.customYiYan[curIndex.value]
+        hitokoto.value = settings.customYiYan[curIndex.value]
         curIndex.value++
         if (curIndex.value >= len) {
             curIndex.value = 0
         }
-        setTimeout(() => {
-            showText()
-        }, 300);
+        showText()
+
     } else {
-        hitokoto.value = await getOneSentence()
+        // hitokoto.value = await getOneSentence()
+        hitokotoScript.value = await getOneSentence()
         showText()
     }
-  
+
 
 }
 </script>

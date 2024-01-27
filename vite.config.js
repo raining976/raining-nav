@@ -7,6 +7,17 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "./",
+  build: {
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        //生产环境时移除console
+        drop_console: true,
+        drop_debugger: true,
+      }
+    }
+  },
   plugins: [
     vue(),
     // ele-plus 自动按需导入
@@ -18,21 +29,7 @@ export default defineConfig({
     }),
   ],
   server: {
-    port: 3000,
-    base: "./ ", //生产环境路径
-    proxy: {
-      // 跨域配置
-      '^/getIp': {
-        target: "https://whois.pconline.com.cn/ipJson.jsp?json=true", //跨域地址
-        changeOrigin: true, //支持跨域
-        rewrite: (path) => path.replace(/^\/getIp/, "")//重写路径,替换 /getIp
-      },
-      '^/getYiyan': {
-        target: "https://v1.hitokoto.cn",
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/getYiyan/, "")
-      }
-    }
+    port: 3000
   },
   resolve: {
     alias: {

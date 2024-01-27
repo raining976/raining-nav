@@ -5,8 +5,6 @@
             <WeatherTime />
             <SearchBar />
             <YiYan />
-
-
             <Settings />
         </main>
         <div v-else id="loading">

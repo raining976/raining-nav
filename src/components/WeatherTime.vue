@@ -25,14 +25,14 @@
                 </div>
             </div>
         </div>
-        <div class="weather" v-if="weatherData">
+        <div class="weather" v-if="weatherData.temperature">
             <div class="cityName">{{ weatherData.city }}</div>
             <div class="condition">{{ weatherData.weather }}</div>
             <div class="symbol" v-show="conditionSymbol != null">{{ conditionSymbol }}</div>
-            <div class="temp">{{ weatherData.temperature }}℃</div>
-            <div class="wind">{{ weatherData.winddirection }}风{{ weatherData.windpower }}级</div>
-
+            <div class="temp" >{{ weatherData.temperature }}℃</div>
+            <div class="wind" >{{ weatherData.winddirection }}风{{ weatherData.windpower }}级</div>
         </div>
+        <div class="weather" v-else>加载中...</div>
     </div>
 </template>
 
