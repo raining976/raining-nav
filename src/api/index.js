@@ -24,7 +24,13 @@ export const getWeather = async () => {
   const regionData = await axios.get(`https://restapi.amap.com/v3/ip?key=${gaodeKey}&ip=${ip}`).then(res=>res.data)
   const cityCode = regionData.adcode
   const weatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${gaodeKey}&city=${cityCode}`
-  return await axios.get(weatherUrl).then(res => res = res.data.lives[0]).catch(error => console.error(error))
+  return await axios.get(weatherUrl).then(res => {
+    // console.log('res',res.data.lives)
+    if(res.data.lives)
+      res = res.data.lives[0]
+    else res = null
+    return res
+  }).catch(error => console.error(error))
 }
 
 function jsonp(url,params = {}) {

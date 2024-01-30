@@ -25,14 +25,16 @@
                 </div>
             </div>
         </div>
-        <div class="weather" v-if="weatherData.temperature">
+        <div class="weather" v-if="weatherData">
             <div class="cityName">{{ weatherData.city }}</div>
             <div class="condition">{{ weatherData.weather }}</div>
             <div class="symbol" v-show="conditionSymbol != null">{{ conditionSymbol }}</div>
-            <div class="temp" >{{ weatherData.temperature }}℃</div>
-            <div class="wind" >{{ weatherData.winddirection }}风{{ weatherData.windpower }}级</div>
+            <div class="temp">{{ weatherData.temperature }}℃</div>
+            <div class="wind">{{ weatherData.winddirection }}风{{ weatherData.windpower }}级</div>
         </div>
-        <div class="weather" v-else>加载中...</div>
+        <div class="weather tip" v-else>
+            {{ weatherTip }}
+        </div>
     </div>
 </template>
 
@@ -47,7 +49,7 @@ const status = useStatusStore();
 const timeData = ref({}); // 时间数据
 const timeInterval = ref(null); // 时间定时器
 const lunarTime = ref({}); // 阴历数据
-const weatherData = ref({}); // 天气数据
+const weatherData = ref(null); // 天气数据
 const conditionSymbols = ref({
     "晴": '☀️',
     "云": '☁',
@@ -55,8 +57,10 @@ const conditionSymbols = ref({
     "雪": '❄️',
     "风": '🌬',
     "雾": '🌫',
+    "阴": '☁️'
 }) // 天气图标的映射
 const conditionSymbol = ref(null) // 当前天气图标
+const weatherTip = ref('加载中...'); // 天气加载或无法获取的提示
 
 /**
  * 根据传入的字符串获取当前天气图标
@@ -84,8 +88,13 @@ const updateTime = () => {
  * 获取天气信息
  */
 const getWeatherData = async () => {
-    weatherData.value = await getWeather()
-    conditionSymbol.value = handlerCondition(weatherData.value.weather)
+    weatherTip.value = '加载中...'
+    weatherData.value = await getWeather().then(res=>res)
+    // console.log('weatherData.value',weatherData.value)
+    if (weatherData.value)
+        conditionSymbol.value = handlerCondition(weatherData.value.weather)
+    else
+        weatherTip.value = '关闭代理就能看到天气了哦'
 }
 
 
@@ -191,9 +200,14 @@ const closeInput = () => {
     .weather {
         @include flex-center();
         transition: 0.5s;
-
+        line-height: 30px;
         div {
             margin: 0 4px
         }
+        &.tip{
+            font-size: 14px;
+        }
     }
-}</style>
+    
+}
+</style>
