@@ -40,6 +40,7 @@ function jsonp(url,params = {}) {
     const queryString = Object.keys(params).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`).join('&');
 
     script.src = `${url}?${queryString}&cb=window.${callbackName}`;
+
     script.async = true;
 
     window[callbackName] = (data) => {
@@ -71,4 +72,23 @@ export const getSearchSuggestions = async (keyword) => {
   }).then(res => res.s)
   return result
 
+};
+
+
+export const getCover = async () => {
+  const key = 'Q9c33jElxy1tJVxrzC9soBlddT';
+  try {
+    const res = await axios.get('https://api.nsmao.net/api/Img/query', {
+      params: { key }, // 更规范的参数传递方式
+      responseType: 'blob', // 关键：告诉 Axios 返回 Blob
+    });
+    
+    // 生成 Blob URL
+    const imageUrl = URL.createObjectURL(res.data);
+    
+    return imageUrl; // 返回可直接用于 <img src> 的 URL
+  } catch (e) {
+    console.error('获取封面失败:', e);
+    return null; // 或返回一个默认图片 URL
+  }
 };

@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <div class="weather" v-if="weatherData">
+        <!-- <div class="weather" v-if="weatherData">
             <div class="cityName">{{ weatherData.city }}</div>
             <div class="condition">{{ weatherData.weather }}</div>
             <div class="symbol" v-show="conditionSymbol != null">{{ conditionSymbol }}</div>
@@ -34,7 +34,7 @@
         </div>
         <div class="weather tip" v-else>
             {{ weatherTip }}
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -101,7 +101,7 @@ const getWeatherData = async () => {
 
 onMounted(() => {
     updateTime()
-    getWeatherData()
+    // getWeatherData()
     startTimer()
 });
 

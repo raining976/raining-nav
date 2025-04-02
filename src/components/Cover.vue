@@ -9,6 +9,7 @@
 import { useStatusStore, useSettingsStore } from '../store';
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { getRandomNumber } from '@/utils/random.js'
+import { getCover } from "@/api";
 const emit = defineEmits(["loadComplete"]);
 const status = useStatusStore()
 const settings = useSettingsStore()
@@ -28,10 +29,10 @@ const imgLoadComplete = () => {
 /**
  * 设置图片url
  */
-const setBgUrl = () => {
-    // bgUrl.value = 'https://source.unsplash.com/random/2560x1440'
-    // bgUrl.value = 'https://tuapi.eees.cc/api.php?category=biying&type=302'
-    bgUrl.value = 'https://bing.img.run/uhd.php'
+const setBgUrl = async () => {
+    // bgUrl.value = 'https://bing.img.run/uhd.php'
+    bgUrl.value = await getCover()
+    console.log('bgUrl.value',bgUrl.value)
     
 }
 
