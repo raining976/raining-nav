@@ -1,7 +1,7 @@
 {
     "rewrites": [
       {
-        "source": "https://v1.hitokoto.cn/:path*",
+        "source": "/hitokoto-api/(.*)",
         "destination": "/api/proxy"
       }
     ]
