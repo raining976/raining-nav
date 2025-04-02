@@ -32,7 +32,7 @@ const imgLoadComplete = () => {
 const setBgUrl = async () => {
     // bgUrl.value = 'https://bing.img.run/uhd.php'
     bgUrl.value = await getCover()
-    console.log('bgUrl.value',bgUrl.value)
+    // console.log('bgUrl.value',bgUrl.value)
     
 }
 
