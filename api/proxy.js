@@ -1,19 +1,14 @@
-export default function (req, res) {
+
+export default async function GET(req) {
     let prefix = "/hitokoto-api"
     if (!req.url.startsWith(prefix)) {
         return;
     }
     let target = "https://v1.hitokoto.cn"+ req.url.substring(prefix.length);
 
-
-    var options = {
-        'method': 'GET',
-        'url': target,
-    };
-    request(options, function (error, response) {
-        if (error) throw new Error(error);
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.write(response.body);
-        res.end();
-    });
+    const res = await fetch(target);
+    console.log('res',res)
+    const products = await res.json();
+    console.log('products',products)
+    return products
 }

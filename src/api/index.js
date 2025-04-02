@@ -3,13 +3,11 @@ import axios from "axios";
 // 获取一言的请求
 export const getOneSentence = async () => {
   // const url = "https://v1.hitokoto.cn/?encode=js&select=%23hitokoto"
-  const url = "/hitokoto-api/?encode=js&select=%23hitokoto"  
-  const script = document.createElement("script");
-  script.src = url;
-  script.defer = true
-  script.async = false
-  document.body.appendChild(script)
-  return script
+  const url = "/hitokoto-api/?encode=json&select=%23hitokoto"  
+
+  const res = await axios.get(url).then(res => res.data)
+  console.log('res',res)
+  return res
 };
 
 
