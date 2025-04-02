@@ -85,8 +85,8 @@ const getSentence = async () => {
         showText()
 
     } else {
-        // hitokoto.value = await getOneSentence()
-        hitokotoScript.value = await getOneSentence()
+        hitokoto.value = await getOneSentence()
+        // hitokotoScript.value = await getOneSentence()
         showText()
     }
 

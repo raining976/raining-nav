@@ -3,10 +3,13 @@ import axios from "axios";
 // 获取一言的请求
 export const getOneSentence = async () => {
   // const url = "https://v1.hitokoto.cn/?encode=js&select=%23hitokoto"
-  const url = "/hitokoto-api/?encode=json&select=%23hitokoto"  
+  // const url = "/hitokoto-api/?encode=json&select=%23hitokoto"  
+  const url = "https://api.nsmao.net/api/quotes/query"
+  const key = 'Q9c33jElxy1tJVxrzC9soBlddT';
 
-  const res = await axios.get(url).then(res => res.data)
-  console.log('res',res)
+  const res = await axios.get(url, {
+    params: { key }, 
+  }).then(res => res.data.data)
   return res
 };
 
@@ -19,20 +22,20 @@ export const getOneSentence = async () => {
  */
 export const getWeather = async () => {
   const gaodeKey = '5af2bbd8702291fc7df7015d94e8c19e' // 高德地图的web服务api
-  const ip = await axios.get('https://api.ipify.org/').then(res=>res.data)
-  const regionData = await axios.get(`https://restapi.amap.com/v3/ip?key=${gaodeKey}&ip=${ip}`).then(res=>res.data)
+  const ip = await axios.get('https://api.ipify.org/').then(res => res.data)
+  const regionData = await axios.get(`https://restapi.amap.com/v3/ip?key=${gaodeKey}&ip=${ip}`).then(res => res.data)
   const cityCode = regionData.adcode
   const weatherUrl = `https://restapi.amap.com/v3/weather/weatherInfo?key=${gaodeKey}&city=${cityCode}`
   return await axios.get(weatherUrl).then(res => {
     // console.log('res',res.data.lives)
-    if(res.data.lives)
+    if (res.data.lives)
       res = res.data.lives[0]
     else res = null
     return res
   }).catch(error => console.error(error))
 }
 
-function jsonp(url,params = {}) {
+function jsonp(url, params = {}) {
   return new Promise((resolve, reject) => {
     const callbackName = `jsonpCallback_${Date.now()}`;
     const script = document.createElement('script');
@@ -81,10 +84,10 @@ export const getCover = async () => {
       params: { key }, // 更规范的参数传递方式
       responseType: 'blob', // 关键：告诉 Axios 返回 Blob
     });
-    
+
     // 生成 Blob URL
     const imageUrl = URL.createObjectURL(res.data);
-    
+
     return imageUrl; // 返回可直接用于 <img src> 的 URL
   } catch (e) {
     console.error('获取封面失败:', e);
